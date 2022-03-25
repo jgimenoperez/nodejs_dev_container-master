@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  api:
+    container_name: nodejs-fruits-api
+    build: .
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/fruits
+      - PORT=3000
+      - NODE_ENV=development
+
+    depends_on:
+      - mongo
+    volumes:
+      - .vscode:/api/.vscode
+    ports: ["3000:3000"]
+    tty: true 
+
+  mongo:
+    container_name: mongo-db
+    image: mongo
+    ports:
+      - 27017:27017
+    # environment:
+    #  MONGO_INITDB_ROOT_USERNAME: root
+    #  MONGO_INITDB_ROOT_PASSWORD: pass12345      
+    volumes:
+      - "./db:/data/db"
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    # environment:
+    #   ME_CONFIG_MONGODB_SERVER: db
+    #   ME_CONFIG_MONGODB_ADMINUSERNAME: root
+    #   ME_CONFIG_MONGODB_ADMINPASSWORD: pass12345        
